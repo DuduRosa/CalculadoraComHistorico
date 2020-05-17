@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        button {
+            width: 50px;
+            height: 50px;
+            margin: 2px;
+        }
+
+        #calculadora {
+            background-color: black;
+            width: 170px;
+            margin: 150px auto;
+        }
+
+        input {
+            width: 98%;
+        }
+
+        /*LISTA*/
+
+        #Lista {
+            width: 60%;
+            margin: 100px auto;
+        }
+
+        #lblDisplay {
+            color: white;
+            font-size: 20px;
+            background-color: #7371FC;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        #listaPrincipal {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            margin: 0 auto;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #7371FC;
+            height: 600px;
+            overflow-y: scroll;
+        }
+
+        #collumNome {
+            display: flex;
+            flex-direction: column;
+            width: 30%;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #7371FC;
+        }
+
+        #lblNome {
+            width: 30%;
+            text-align: center;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #7371FC;
+            border-top-left-radius: 5px;
+        }
+
+
+        #collumCPF {
+            display: flex;
+            flex-direction: column;
+            width: 30%;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #7371FC;
+        }
+
+        #lblCPF {
+            width: 30%;
+            text-align: center;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #7371FC;
+            border-top-left-radius: 5px;
+        }
+
+        #collumData {
+            display: flex;
+            flex-direction: column;
+            width: 30%;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #7371FC;
+        }
+
+        #lblData {
+            width: 30%;
+            text-align: center;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #7371FC;
+            border-top-left-radius: 5px;
+        }
+
+        #collumEmail {
+            display: flex;
+            flex-direction: column;
+            width: 30%;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #7371FC;
+        }
+
+        #lblEmail {
+            width: 30%;
+            text-align: center;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #7371FC;
+            border-top-left-radius: 5px;
+        }
+
+
+        p {
+            font-size: 10pt;
+            margin-top: 2%;
+            text-align: center;
+            margin-bottom: 2%;
+            border-bottom: solid;
+            border-width: 2px;
+            border-color: #7371FC;
+
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <section id="calculadora">
+            <div>
+                <input type="number" id="tela" readonly>
+                <input type="number" id="telaFake" hidden>
+                <input type="text" id="telaOperador" hidden>
+            </div>
+            <div>
+                <button id="um" name="um" onclick="um()">1</button>
+                <button id="dois" name="dois" onclick="dois()">2</button>
+                <button id="tres" name="tres" onclick="tres()">3</button>
+            </div>
+            <div>
+                <button id="quatro" name="quatro" onclick="quatro()">4</button>
+                <button id="cinco" name="cinco" onclick="cinco()">5</button>
+                <button id="seis" name="seis" onclick="seis()">6</button>
+            </div>
+            <div>
+                <button id="sete" name="sete" onclick="sete()">7</button>
+                <button id="oito" name="oito" onclick="oito()">8</button>
+                <button id="nove" name="nove" onclick="nove()">9</button>
+            </div>
+            <div>
+                <button id="mais" name="mais" onclick="operacao('+')">+</button>
+                <button id="zero" name="zero" onclick="zero()">0</button>
+                <button id="menos" name="menos" onclick="operacao('-')">-</button>
+            </div>
+            <div>
+                <button id="vezes" name="vezes" onclick="operacao('*')">*</button>
+                <button id="igual" name="igual" onclick="igual()">=</button>
+                <button id="divisao" name="divisao" onclick="operacao('/')">/</button>
+            </div>
+            <!--Formulario para o BackEnd-->
+            <form action="/index" method="post" id="formHist">
+                <input type="text" name="n1H" id="n1H" hidden>
+                <input type="text" name="operadorH" id="operadorH" hidden>
+                <input type="text" name="n2H" id="n2H" hidden>
+                <input type="text" name="resultH" id="resultH" hidden>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <footer>
+            <section>
+                <section>
+                    <!--Inicio da lista completa-->
+                    <div id="Lista">
+                        <!--Inicio do cabeçalho da lista-->
+                        <div id="lblDisplay">
+                            <div id="lblNome">
+                                <label for="">Numero 1</label>
+                            </div>
+                            <div id="lblCPF">
+                                <label for="">Operador</label>
+                            </div>
+                            <div id="lblData">
+                                <label for="">Numero 2</label>
+                            </div>
+                            <div id="lblEmail">
+                                <label for="">Resultado</label>
+                            </div>
+                        </div>
+                        <!--Inicio da lista Preenchida  th:if="${contatos}"   -->
+                        <div id="listaPrincipal" th:if="${historico}">
+                            <div id="collumNome">
+                                <p th:each="histnum : ${historico}" th:text="${histnum.numero1}"></p>
+                            </div>
+                            <div id="collumCPF">
+                                <p th:each="histnum : ${historico}" th:text="${histnum.operador}"></p>
+                            </div>
+                            <div id="collumData">
+                                <p th:each="histnum : ${historico}" th:text="${histnum.numero2}"></p>
+                            </div>
+                            <div id="collumEmail">
+                                <p id="resultTH" th:each="histnum : ${historico}" th:text="${histnum.resultado}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </footer>
+    </footer>
+    <script>
+        function um() {
+
+            var telaValor = window.document.getElementById('tela').value;
+            var tela = window.document.getElementById('tela').value = telaValor + 1;
+
+        }
+
+        function dois() {
+
+            var telaValor = window.document.getElementById('tela').value;
+            var tela = window.document.getElementById('tela').value = telaValor + 2;
+
+        }
+
+        function tres() {
+
+            var telaValor = window.document.getElementById('tela').value;
+            var tela = window.document.getElementById('tela').value = telaValor + 3;
+
+        }
+
+        function quatro() {
+
+            var telaValor = window.document.getElementById('tela').value;
+            var tela = window.document.getElementById('tela').value = telaValor + 4;
+
+        }
+
+        function cinco() {
+
+            var telaValor = window.document.getElementById('tela').value;
+            var tela = window.document.getElementById('tela').value = telaValor + 5;
+
+        }
+
+        function seis() {
+
+            var telaValor = window.document.getElementById('tela').value;
+            var tela = window.document.getElementById('tela').value = telaValor + 6;
+
+        }
+
+        function sete() {
+
+            var telaValor = window.document.getElementById('tela').value;
+            var tela = window.document.getElementById('tela').value = telaValor + 7;
+
+        }
+
+        function oito() {
+
+            var telaValor = window.document.getElementById('tela').value;
+            var tela = window.document.getElementById('tela').value = telaValor + 8;
+
+        }
+
+        function nove() {
+
+            var telaValor = window.document.getElementById('tela').value;
+            var tela = window.document.getElementById('tela').value = telaValor + 9;
+
+        }
+
+        function zero() {
+            var telaValor = window.document.getElementById('tela').value;
+            var tela = window.document.getElementById('tela').value = telaValor + 0;
+        }
+
+        function operacao(valor) {
+
+            if (valor == '+') {
+                var telaValor = window.document.getElementById('tela').value;
+                var telaFake = window.document.getElementById('telaFake').value = telaValor;
+                var telaOperador = window.document.getElementById('telaOperador').value = '+';
+                var telaValor = window.document.getElementById('tela').value = '';
+            } else if (valor == '-') {
+                var telaValor = window.document.getElementById('tela').value;
+                var telaFake = window.document.getElementById('telaFake').value = telaValor;
+                var telaOperador = window.document.getElementById('telaOperador').value = '-';
+                var telaValor = window.document.getElementById('tela').value = '';
+            } else if (valor == '/') {
+                var telaValor = window.document.getElementById('tela').value;
+                var telaFake = window.document.getElementById('telaFake').value = telaValor;
+                var telaOperador = window.document.getElementById('telaOperador').value = '/';
+                var telaValor = window.document.getElementById('tela').value = '';
+            } else if (valor == '*') {
+                var telaValor = window.document.getElementById('tela').value;
+                var telaFake = window.document.getElementById('telaFake').value = telaValor;
+                var telaOperador = window.document.getElementById('telaOperador').value = '*';
+                var telaValor = window.document.getElementById('tela').value = '';
+            }
+
+        }
+
+        function igual() {
+
+            var telaValor = window.document.getElementById('tela').value;
+            var telaFake = window.document.getElementById('telaFake').value;
+            var telaOperador = window.document.getElementById('telaOperador').value;
+            //VARIAVEL PARA iSERCAO NO FORM 
+            var telaN1H = window.document.getElementById('tela').value;
+
+            if (telaOperador == '+') {
+
+                var NFK = Number(telaFake);
+                var TV = Number(telaValor);
+                var result = Number(NFK + TV);
+                var telaValor = window.document.getElementById('tela').value = result;
+            } else if (telaOperador == '-') {
+
+                var NFK = Number(telaFake);
+                var TV = Number(telaValor);
+                var result = Number(NFK - TV);
+                var telaValor = window.document.getElementById('tela').value = result;
+            } else if (telaOperador == '*') {
+
+                var NFK = Number(telaFake);
+                var TV = Number(telaValor);
+                var result = Number(NFK * TV);
+                var telaValor = window.document.getElementById('tela').value = result;
+            } else if (telaOperador == '/') {
+
+                var NFK = Number(telaFake);
+                var TV = Number(telaValor);
+                var result = Number(NFK / TV);
+                var telaValor = window.document.getElementById('tela').value = result;
+            }
+
+            //ENVIA FORMULARIO PARA O BACKEND
+            const formHist = window.document.getElementById('formHist');
+
+            var n1h = window.document.getElementById('n1H').value = telaN1H;
+            var operadorh = window.document.getElementById('operadorH').value = telaOperador;
+            var n2h = window.document.getElementById('n2H').value = telaFake;
+            var resulth = window.document.getElementById('resultH').value = telaValor;
+
+            formHist.submit();
+
+            recolocar();
+        }
+
+    </script>
+</body>
+
+</html>
